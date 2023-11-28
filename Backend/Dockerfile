@@ -14,6 +14,8 @@
 
 # #5
 # COPY . /srv/app/admin-server
+
+
 FROM node:21.2.0-alpine
 
 WORKDIR /usr/src/app
@@ -25,7 +27,9 @@ RUN npm install
 
 COPY . .
 
-EXPOSE 4000
+RUN npm run build:frontend
+
+EXPOSE 3000
 
 
 #6
