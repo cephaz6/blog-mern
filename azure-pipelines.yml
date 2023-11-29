@@ -6,7 +6,7 @@ pr:
 pool:
   vmImage: "ubuntu-latest"
 
-steps:
+steps: 
   - script: |
       npm install
       npm run build
