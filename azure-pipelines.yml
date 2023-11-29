@@ -1,0 +1,28 @@
+trigger:
+- master  # Set this to the branch you want to trigger the pipeline on
+
+pr:
+- main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+- script: |
+    npm install
+    npm run build
+  displayName: 'Install and Build'
+
+- task: CopyFiles@2
+  inputs:
+    sourceFolder: 'build'
+    contents: '**/*'
+    targetFolder: '$(Build.ArtifactStagingDirectory)'
+  displayName: 'Copy build files'
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    pathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    artifactName: 'drop'
+    publishLocation: 'Container'
+  displayName: 'Publish Artifact'
