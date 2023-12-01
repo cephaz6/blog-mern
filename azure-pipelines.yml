@@ -13,15 +13,6 @@ steps:
   inputs:
     versionSpec: '10.x'
   displayName: 'Install Node.js'
-
-- task: Npm@1
-  inputs:
-    command: 'install'
-    workingDir: 'BackEnd'
-- task: Npm@1
-  inputs:
-    command: 'install'
-    workingDir: 'FrontEnd'
     
 - script: |
     npm install
