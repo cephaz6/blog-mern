@@ -32,7 +32,7 @@ const Header = () => {
     <header>
       <div className="averager">
         <Link to="/" className="logo">
-          <h5>DevOps</h5>
+          <h5>BLOGIVERSAL</h5>
         </Link>
         <SearchForm />
         <div className="header_options">
