@@ -1,21 +1,35 @@
-# Node.js
-# Build a general Node.js project with npm.
-# Add steps that analyze code, save build artifacts, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
-
 trigger:
-- master
+- cephas-blog  # Trigger the pipeline when changes are pushed to the main branch
 
 pool:
-  vmImage: ubuntu-latest
+  vmImage: 'ubuntu-latest'  # Use the latest Ubuntu image
 
-steps:
-- task: NodeTool@0
-  inputs:
-    versionSpec: '10.x'
-  displayName: 'Install Node.js'
+stages:
+- stage: Build
+  jobs:
+  - job: BuildBackend
+    displayName: 'Build Backend'
+    steps:
+    - task: NodeTool@0
+      inputs:
+        versionSpec: '18.x'
+      displayName: 'Install Node.js'
 
-- script: |
-    npm install
-    npm run build
-  displayName: 'npm install and build'
+    - script: |
+        cd server
+        npm install
+      displayName: 'Install Backend Dependencies'
+
+  - job: BuildFrontend
+    displayName: 'Build Frontend'
+    steps:
+    - task: NodeTool@0
+      inputs:
+        versionSpec: '18.x'
+      displayName: 'Install Node.js'
+
+    - script: |
+        cd client
+        npm install
+        npm run build
+      displayName: 'Build Frontend'
