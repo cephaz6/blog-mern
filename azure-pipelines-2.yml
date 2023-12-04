@@ -1,0 +1,49 @@
+trigger:
+- master  # Trigger the pipeline when changes are pushed to the main branch
+
+pool:
+  vmImage: 'ubuntu-latest'  # Use the latest Ubuntu image
+
+stages:
+- stage: Build
+  jobs:
+  - job: BuildBackend
+    displayName: 'Build Backend'
+    steps:
+    - task: NodeTool@0
+      inputs:
+        versionSpec: '18.x'
+      displayName: 'Install Node.js'
+
+    - script: |
+        cd server
+        npm install
+      displayName: 'Install Backend Dependencies'
+
+  - job: BuildFrontend
+    displayName: 'Build Frontend'
+    steps:
+    - task: NodeTool@0
+      inputs:
+        versionSpec: '18.x'
+      displayName: 'Install Node.js'
+
+    - script: |
+        cd client
+        npm install
+        npm run build
+      displayName: 'Build Frontend'
+
+- stage: Deploy
+  jobs:
+  - job: DeployToAzureWebApp
+    displayName: 'Deploy to Azure Web App'
+    steps:
+    - task: AzureRmWebAppDeployment@4
+      inputs:
+        ConnectionType: 'AzureRM'
+        azureSubscription: '7290a919-3d43-4093-8f8c-bba630e939c8'
+        appType: 'webAppLinux'
+        WebAppName: 'blogger-cephas'
+        packageForLinux: '$(Pipeline.Workspace)/BuildArtifact/client'
+        RuntimeStack: 'NODE|18 LTS'
